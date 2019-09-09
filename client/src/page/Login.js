@@ -33,7 +33,7 @@ class Login extends React.Component {
     onchangeHandler = e => {
         this.setState({[e.target.name]:e.target.value})
         if(e.target.name === 'password2') {
-           this.state.errors.name="Password not Match!"
+          //  this.state.errors.name="Password not Match!"
         }
         // console.log(e.target)
     }
