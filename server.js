@@ -1,19 +1,24 @@
 const express = require('express');
-
-const app = express();
+const passport = require('passport');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const userRoute = require('./routers/user');
+const transactionRoute = require('./routers/transaction');
 
+const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(passport.initialize());
+require('./passport')(passport);
+
 app.use(morgan('dev'));
 app.use(cors());
 require('dotenv').config();
 
 app.use('/api/users', userRoute);
+app.use('/api/transction', transactionRoute);
 
 app.get('/', (req, res) => {
         res.json({

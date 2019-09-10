@@ -24,6 +24,9 @@ router.post('/regiester', (req, res) => {
                                         lastName,
                                         email,
                                         password,
+                                        balance: 0,
+                                        income: 0,
+                                        expense: 0,
                                 });
 
                                 bcrypt.genSalt(10, (err, salt) => {
@@ -80,6 +83,18 @@ router.post('/login', (req, res) => {
                         });
                 })
                 .catch(err => res.json(err));
+});
+
+// get all user
+
+router.get('/all', (req, res) => {
+        User.find()
+                .then(users => {
+                        res.status(200).json(users);
+                })
+                .catch(err => {
+                        res.status(403).json({ message: 'Please Try again' });
+                });
 });
 
 module.exports = router;
