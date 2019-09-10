@@ -13,8 +13,10 @@ router.post('/regiester', (req, res) => {
                 const { firstName, lastName, email, password } = req.body;
                 User.findOne({ email })
                         .then(user => {
+                                const errors = {};
                                 if (user) {
-                                        return res.status(400).json({ email: 'Email Already Exist!' });
+                                        errors.email = 'Email Already Exist!';
+                                        return res.status(409).json(errors);
                                 }
 
                                 const newUser = new User({
@@ -58,7 +60,7 @@ router.post('/login', (req, res) => {
         User.findOne({ email })
                 .then(user => {
                         if (!user) {
-                                return res.json({ meassage: 'This email not registerd!' });
+                                return res.status(401).json({ email: 'This email not registerd!' });
                         }
                         bcrypt.compare(password, user.password, (err, result) => {
                                 if (!err) {
@@ -73,7 +75,7 @@ router.post('/login', (req, res) => {
                                                         .json({ token: `Bearer ${token}`, msg: 'Successuly Login' });
                                         }
 
-                                        return res.json({ msg: 'Password does not match' });
+                                        return res.status(401).json({ password: 'Password does not match' });
                                 }
                         });
                 })
