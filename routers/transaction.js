@@ -2,7 +2,7 @@ const router = require('express').Router();
 const User = require('../models/User');
 const Transaction = require('../models/Transaction');
 const auth = require('../auth.js');
-
+const transactionValidaor = require('../validation/transaction');
 // get all transaction
 router.get('/', auth, (req, res) => {
         Transaction.find()
@@ -36,6 +36,10 @@ router.get('/:transactionId', (req, res) => {
 
 // create a transaction
 router.post('/', auth, (req, res) => {
+        const transactonValid = transactionValidaor(req.body);
+        if (!transactonValid.isValid) {
+                return res.status(400).json(transactonValid.errrors);
+        }
         const { balance, type, note } = req.body;
         const userId = req.user._id;
         const transaction = new Transaction({ balance, type, note, author: userId });
