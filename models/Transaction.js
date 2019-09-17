@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const TransactionSchema = new Schema(
         {
-                amount: {
+                balance: {
                         type: Number,
                         required: true,
                 },

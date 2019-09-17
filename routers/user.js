@@ -71,6 +71,9 @@ router.post('/login', (req, res) => {
                                                 const payload = {
                                                         _id: user._id,
                                                         email: user.email,
+                                                        firstName: user.firstName,
+                                                        lastName: user.lastName,
+                                                        balance: user.balance,
                                                 };
                                                 const token = jwt.sign(payload, 'CMMANIK', { expiresIn: '2h' });
                                                 return res

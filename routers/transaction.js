@@ -5,13 +5,13 @@ const auth = require('../auth.js');
 const transactionValidaor = require('../validation/transaction');
 // get all transaction
 router.get('/', auth, (req, res) => {
-        Transaction.find()
+        const userId = req.user._id;
+        Transaction.find({ author: userId })
                 .then(trans => {
                         if (trans.length === 0) {
-                                res.status(200).json({ message: 'No data found!' });
-                        } else {
-                                res.status(200).json(trans);
+                                return res.status(404).json({ message: 'No data found!' });
                         }
+                        res.status(200).json(trans);
                 })
                 .catch(() => {
                         res.status(502).json({ message: 'Please Try agian Later!' });
@@ -21,12 +21,13 @@ router.get('/', auth, (req, res) => {
 // get a single transaction
 router.get('/:transactionId', (req, res) => {
         const { transactionId } = req.params;
+        console.log(transactionId);
         Transaction.findById(transactionId)
-                .then(transaction => {
-                        if (!transaction) {
-                                res.status(204).json({ message: 'No data found!' });
+                .then(transction => {
+                        if (transction) {
+                                res.status(200).json(transction);
                         } else {
-                                res.status(200).json(transaction);
+                                res.status(204).json({ message: 'No data found!' });
                         }
                 })
                 .catch(() => {
@@ -51,28 +52,29 @@ router.post('/', auth, (req, res) => {
                                 updatedUser.balance += balance;
                                 updatedUser.income += balance;
                         } else if (type === 'expense') {
-                                updatedUser.expense -= balance;
+                                updatedUser.balance -= balance;
                                 updatedUser.expense += balance;
                         }
                         updatedUser.transactions.unshift(trans._id);
-                        return User.findByIdAndUpdate(userId, { $set: updatedUser });
-                })
-                .then(response => {
-                        console.log('final restur', response);
-                        res.status(201).json({
-                                message: 'Transaction Created Succesfully!',
-                                ...response._doc,
+                        User.findByIdAndUpdate(updatedUser._id, { $set: updatedUser }, { new: true }, (err, doc) => {
+                                Transaction.find({ author: userId }).then(updateTrans => {
+                                        if (trans.length === 0) {
+                                                res.status(200).json({ message: 'No data found!' });
+                                        } else {
+                                                res.status(200).json(updateTrans);
+                                        }
+                                });
                         });
                 })
-                .catch(() => {
-                        res.status(502).json({ message: 'Please Try agian Later!' });
+                .catch(err => {
+                        res.status(502).json({ message: 'Please Try agian Later!', err });
                 });
 });
 
 // edite a transtion
 router.put('/:transactionId', auth, (req, res) => {
         const { transactionId } = req.params;
-        User.findByIdAndUpdate(transactionId, { $set: req.body })
+        Transaction.findByIdAndUpdate(transactionId, { $set: req.body })
                 .then(response => {
                         res.status(200).json({
                                 message: 'Update Succesfully',
@@ -87,13 +89,16 @@ router.put('/:transactionId', auth, (req, res) => {
 // delete a transaction
 router.delete('/:transactionId', auth, auth, (req, res) => {
         const { transactionId } = req.params;
-        console.log(transactionId);
-        User.findByIdAndRemove(transactionId)
+        Transaction.findByIdAndRemove(transactionId)
                 .then(result => {
-                        res.status(200).json({
-                                message: 'Deleter Succesfully',
-                                ...result,
-                        });
+                        if (result) {
+                                res.status(200).json({
+                                        message: 'Deleter Succesfully',
+                                        ...result,
+                                });
+                        } else {
+                                res.status(404).json({ message: 'Not found' });
+                        }
                 })
                 .catch(() => {
                         res.status(502).json({ message: 'Please Try agian Later!' });

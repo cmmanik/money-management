@@ -1,19 +1,21 @@
 import React from 'react';
-import Home from './page/Home';
+
 import NoMatch from './page/Nomatch'
 import Login from './page/Login';
 import Register from './page/Register';
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
-import AppBar from '@material-ui/core/AppBar';
-import CameraIcon from '@material-ui/icons/PhotoCamera';
-// import Signup from './RegisterFrom'
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
-import Toolbar from '@material-ui/core/Toolbar';
+
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Footer from './page/Footer';
+import Dashboard from './page/Dashboard';
+import './App.css'
+import Transaction from './page/TransctionDetails';
+import UpdateTransction from './page/UpdateTransction';
+import Navbar from './components/Navbar';
+import PrivetRoute from './PrivetRoute';
 
 const useStyles = makeStyles(theme => ({
   icon: {
@@ -54,36 +56,32 @@ function App() {
    <BrowserRouter>
     <React.Fragment>
       <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <CameraIcon className={classes.icon} />
-          <Typography variant="h6" color="inherit" noWrap>
-            Money Mangent
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <Navbar/>
       <main>
-        <Container className={classes.cardGrid} maxWidth="md">
-          <Grid container spacing={4}>
-           {/* <Signup/> */}
+        <Container className={classes.cardGrid} >
           
+       
+  
           <Switch>
-            <Route exact path="/" component={Home}  />
+           
             <Route  path="/login" component={Login}  />
             <Route  path="/register" component={Register}  />
+            <PrivetRoute exact  path="/" component={Dashboard}  />
+            <PrivetRoute   path="/update/:id" component={UpdateTransction}  />
+            <PrivetRoute  path="/transaction/:id" component={Transaction}  />
             <Route component={NoMatch} />
           </Switch>
 
-          </Grid>
+       
         </Container>
       </main>
       {/* Footer */}
       <footer className={classes.footer}>
         <Typography variant="h6" align="center" gutterBottom>
-          Footer
+          @CM~Manik
         </Typography>
         <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-          Something here to give the footer a purpose!
+          
         </Typography>
         <Footer />
       </footer>

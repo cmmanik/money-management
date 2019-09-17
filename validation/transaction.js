@@ -4,9 +4,7 @@ const regisTration = data => {
         if (!data.balance) {
                 errrors.balance = 'Please Provide your Balance';
         }
-        if (data.balance.trim().length === 0) {
-                errrors.balance = 'Please Provide your Balance';
-        }
+
         if (!data.type) {
                 errrors.type = 'Please Provide Balance Type';
         }

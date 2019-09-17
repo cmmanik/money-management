@@ -10,6 +10,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Container from '@material-ui/core/Container';
+import {Redirect } from 'react-router-dom'
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 
 // const classes = useStyles();
@@ -28,9 +29,12 @@ class Login extends React.Component {
     state = {
         email:'',
         password:'',
-        errors:{}
+        errors:{},
+      
     }
     
+    
+
     static getDerivedStateFromProps(props, state) {
       if(JSON.stringify(props.auth.errors) !== JSON.stringify(state.errors) ) {
         state.errors = props.auth.errors
@@ -45,16 +49,18 @@ class Login extends React.Component {
     submitHandler = e => {
         e.preventDefault();
         let {email, password} = this.state;
-        this.props.login({email, password}, this.props.history)
+        let {from} = this.props.location.state || {from:{pathname:'/'}}
+        this.props.login({email, password}, this.props.history, from.pathname)
+         
     }
 
 
+
     render() {
-
-       
+    let {auth} = this.props;
     let { email, password, errors} = this.state;
+      if(auth.isAurienticated) return < Redirect to='/' />
         return (
-
             <Container component="main" maxWidth="xs">
                   <CssBaseline />
                    <div className={classes.paper}>

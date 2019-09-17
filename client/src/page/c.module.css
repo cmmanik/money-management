@@ -4,3 +4,13 @@
  .error {
    color: red !important;
  }
+ .paper{
+  padding: 10px;
+  text-align: 'center';
+  white-space: 'nowrap';
+  margin-bottom: 10px,
+}
+.main_card {
+  max-width: 400px;
+  margin:  0 auto
+}

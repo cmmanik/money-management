@@ -13,7 +13,7 @@ export const register = (user, history) => dispatch =>  {
         })
 }
 
-export const login = (user, history) => dispatch => {
+export const login = (user, history, loc) => dispatch => {
     axios.post('/api/users/login', user)
         .then(response => {
             const token = response.data.token;
@@ -21,16 +21,15 @@ export const login = (user, history) => dispatch => {
             localStorage.setItem('auth_token', token)
             const decode = jwtDecode(token)
             dispatch({type:Types.SET_USER, payload:{user:decode}})
-           history.push('/')
+            history.push(loc)
         })
         .catch(err => {
             dispatch({type:Types.SET_ERROR, payload:{errors:err.response.data}})
-            console.log(err);
         })
 }
 
 export const logout = history => dispatch => {
     localStorage.removeItem('auth_token');
     history.push('/login')
-    dispatch({type:Types.SET_USER, payload:{user:{}}})
+    dispatch({type:Types.LOGOUT_USER, payload:{user:{}}})
 }
