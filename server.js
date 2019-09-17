@@ -36,7 +36,6 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-        console.log(`Server is runnig http://localhost:${process.env.PORT}`);
         mongoose.connect(
                 `mongodb+srv://${process.env.dbuserName}:${
                         process.env.password
