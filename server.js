@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 
 app.listen(port, () => {
         mongoose.connect(
-                `mongodb+srv://${process.env.dbuserName}:${
+                `mongodb+srv://${process.env.dbuserName}:@${
                         process.env.password
                 }@cluster0-ifkti.mongodb.net/test?retryWrites=true&w=majority`,
                 { useNewUrlParser: true },
@@ -50,3 +50,4 @@ app.listen(port, () => {
                 }
         );
 });
+// mongodb+srv://cmmanik:@cmmanik@cluster0-ifkti.mongodb.net/test?retryWrites=true&w=majority
